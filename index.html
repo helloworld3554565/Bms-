@@ -1,67 +1,139 @@
 <!DOCTYPE html>
-<html lang="ar" dir="rtl">
+<html lang="ar">
 <head>
   <meta charset="UTF-8">
-  <title>  </title>
+  <title>مخطط أسبوعي للصلاة</title>
   <style>
-  body {  
-    background-color: lightblue;
-  }
-  h1 {  
-    background-color: white; 
-   background-size: 70px;
-    font-family: Arial; 
-    
-  }
-  ol { 
-    background-color: green;
-    color: white;
-  } 
-button1{ 
-  background-color: purple;
-  color:white;
-  width: 90px;
-  height: 100px; 
-} 
-button { 
-  background-color: red;
-  color: white;
-  width: 80px;
-  height: 50px;
-}
-rectangle { 
-  background-color: black;
-  width: 450px;
-  height: 5px;
-}
-</style>
+    body {
+      font-family: "Tahoma", sans-serif;
+      background: #f9f9f9;
+      direction: rtl;
+      text-align: center;
+    }
+    h1 {
+      color: #2c3e50;
+    }
+    table {
+      margin: 20px auto;
+      border-collapse: collapse;
+      width: 80%;
+      background: #fff;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+    th, td {
+      border: 1px solid #ddd;
+      padding: 10px;
+      cursor: pointer;
+      text-align: center;
+    }
+    th {
+      background: #2c3e50;
+      color: #fff;
+    }
+    tr:nth-child(even) {
+      background: #f2f2f2;
+    }
+    .done {
+      background: #27ae60;
+      color: #fff;
+      font-weight: bold;
+    }
+  </style>
 </head>
 <body>
-  <h1>العلم المعرفة التوعية</h1>
- <ol> برامج القناة 
-   <li> دليلك للمعرفة</li>
-   <p>برنامج قمنا باطلاقه في منتصف جوان من حلقتين </p>
-  <a href="https://youtu.be/p3e3WcHKBwM?si=XCYV1jq1oDNnhSW8">
-  <button>دليلك للمعرفة</button>
-</a>
-   <li>الغموض</li>
-   <p>تم اطلاقه في شهر جويلية يتكون من الحلقة الواحدة </p>
-   <a href="https://youtu.be/q3YXn0wjiCg?si=9HfQJM4IuQUaz7hO">
-  <button>الغموض</button>
-</a>
-   <li>الافات</li>
-   <p>برنامج تم اطلاقه في سبتمبر يتكون من حلقتين يحكي عن الافات ا 
-  لاجتماعية واضرارها</p>
-<a href="https://youtu.be/pjhvma-oq3w?si=umGWECiSBa_L24JR">
-  <button>الافات</button>
-</a>
-   <h2>نتمنى لكم مشاهدة ممتعة ومليئة بالمعرفة </h2>
- </ol>
- <h2>حسابنا على مواقع التواصل الاجتماعي </h2>
-<a href="https://www.instagram.com/ska2026q?igsh=MXR5dm1qbTJ6bjcyeg">
-  <button1>انستغرام</button>
-</a>  
+  <h1>مخطط أسبوعي للصلاة</h1>
+  <table id="prayerTable">
+    <thead>
+      <tr>
+        <th>اليوم</th>
+        <th>الصبح</th>
+        <th>الظهر</th>
+        <th>العصر</th>
+        <th>المغرب</th>
+        <th>العشاء</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>السبت</td>
+        <td></td><td></td><td></td><td></td><td></td>
+      </tr>
+      <tr>
+        <td>الأحد</td>
+        <td></td><td></td><td></td><td></td><td></td>
+      </tr>
+      <tr>
+        <td>الاثنين</td>
+        <td></td><td></td><td></td><td></td><td></td>
+      </tr>
+      <tr>
+        <td>الثلاثاء</td>
+        <td></td><td></td><td></td><td></td><td></td>
+      </tr>
+      <tr>
+        <td>الأربعاء</td>
+        <td></td><td></td><td></td><td></td><td></td>
+      </tr>
+      <tr>
+        <td>الخميس</td>
+        <td></td><td></td><td></td><td></td><td></td>
+      </tr>
+      <tr>
+        <td>الجمعة</td>
+        <td></td><td></td><td></td><td></td><td></td>
+      </tr>
+    </tbody>
+  </table>
 
-<div class="rectangle"></div>
+  <script>
+    const table = document.getElementById("prayerTable");
+
+    // تحميل الحالة من localStorage عند فتح الصفحة
+    function loadState() {
+      const saved = JSON.parse(localStorage.getItem("prayers")) || {};
+      [...table.rows].forEach((row, rIndex) => {
+        [...row.cells].forEach((cell, cIndex) => {
+          if (rIndex > 0 && cIndex > 0) { // نتجنب العناوين
+            const key = `${rIndex}-${cIndex}`;
+            if (saved[key]) {
+              cell.classList.add("done");
+              cell.textContent = "✔";
+            }
+          }
+        });
+      });
+    }
+
+    // حفظ الحالة عند الضغط
+    function saveState() {
+      const saved = {};
+      [...table.rows].forEach((row, rIndex) => {
+        [...row.cells].forEach((cell, cIndex) => {
+          if (rIndex > 0 && cIndex > 0) {
+            const key = `${rIndex}-${cIndex}`;
+            if (cell.classList.contains("done")) {
+              saved[key] = true;
+            }
+          }
+        });
+      });
+      localStorage.setItem("prayers", JSON.stringify(saved));
+    }
+
+    // إضافة حدث الضغط لكل خلية
+    [...table.rows].forEach((row, rIndex) => {
+      [...row.cells].forEach((cell, cIndex) => {
+        if (rIndex > 0 && cIndex > 0) {
+          cell.addEventListener("click", () => {
+            cell.classList.toggle("done");
+            cell.textContent = cell.classList.contains("done") ? "✔" : "";
+            saveState();
+          });
+        }
+      });
+    });
+
+    loadState();
+  </script>
 </body>
 </html>
